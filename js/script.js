@@ -77,4 +77,34 @@ const insertDecimal = () =>{
         }
     }
 }
-document.getElementById('decimal').addEventListener('click', insertDecimal)
+document.getElementById('decimal').addEventListener('click', insertDecimal);
+
+const mapKeyboard = {
+    0: 'tecla0',
+    1: 'tecla1',
+    2: 'tecla2',
+    3: 'tecla3',
+    4: 'tecla4',
+    5: 'tecla5',
+    6: 'tecla6',
+    7: 'tecla7',
+    8: 'tecla8',
+    9: 'tecla9',
+    '/': 'operadorDividir',
+    '*': 'operadorMultiplicar',
+    '-': 'operadorSubtrair',
+    '+': 'operadorAdicionar',
+    '=': 'igual',
+    Enter: 'igual',
+    Backspace: 'backspace',
+    c: 'limparDisplay',
+    Escape: 'limparCalculo',
+    ',': 'decimal',
+}
+
+const mappingKeyboard = (event) => {
+    const keyOn = event.key;
+    const keyAllowed = () => Object.keys(mapKeyboard).indexOf(keyOn) !== -1
+    if(keyAllowed()) document.getElementById(mapKeyboard[keyOn]).click();
+}
+document.addEventListener('keydown' , mappingKeyboard)
