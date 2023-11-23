@@ -12,7 +12,7 @@ const operatorPending = () => operator !== undefined
 
 const calculate = () => {
     if (operatorPending()) {
-        const currentNumber = parseFloat(display.textContent);
+        const currentNumber = parseFloat(display.textContent.replace(',', '.'));
         newNumber = true;
         const res = eval (`${previousNumber}${operator}${currentNumber}`);
         updateDisplay(res);
@@ -21,10 +21,10 @@ const calculate = () => {
 
 const updateDisplay = (text) => {
     if(newNumber){
-        display.textContent = text;
+        display.textContent = text.toLocaleString('BR');
         newNumber = false
     } else {
-        display.textContent += text;
+        display.textContent += text.toLocaleString('BR');
     }
 }   
 
@@ -35,10 +35,46 @@ const selectOperator = (event) => {
         calculate();
         newNumber = true;
         operator = event.target.textContent;
-        previousNumber = parseFloat(display.textContent);
-        console.log(operator);
+        previousNumber = parseFloat(display.textContent.replace(',','.'));
     }
 }
 operators.forEach((operator) => operator.addEventListener('click', selectOperator));
 
+const activateEqual = () => {
+    calculate();
+    operator = undefined
+}
+document.getElementById('igual').addEventListener('click', activateEqual);
 
+const cleanDisplay = () => display.textContent = '';
+document.getElementById('limparDisplay').addEventListener('click', cleanDisplay);
+
+const cleanCalculation = () => {
+    cleanDisplay();
+    operator = undefined;
+    newNumber = true;
+    previousNumber = undefined;
+}
+document.getElementById('limparCalculo').addEventListener('click', cleanCalculation);
+
+const removeLastNumber = () => display.textContent = display.textContent.slice(0, -1)
+document.getElementById('backspace').addEventListener('click', removeLastNumber)
+
+const reverseSignal = () => {
+    newNumber = true;
+    updateDisplay(display.textContent * -1);
+}
+document.getElementById('inverter').addEventListener('click', reverseSignal)
+
+const existDecimal = () => display.textContent.indexOf(',') !== -1;
+const existValue = () => display.textContent.length > 0;
+const insertDecimal = () =>{
+    if(!existDecimal()) {
+        if(existValue()) {
+            updateDisplay(',')
+        } else {
+            updateDisplay('0,')
+        }
+    }
+}
+document.getElementById('decimal').addEventListener('click', insertDecimal)
